@@ -1,10 +1,13 @@
 import { Routes } from '@angular/router';
 import { UploadProductComponent } from './components/upload-product/upload-product.component';
-import { HomeComponent } from './components/home/home.component';
 import { ProductsComponent } from './components/products/products.component';
+import { AdminLoginComponent } from './components/admin-login/admin-login.component';
+import { adminAuthGuard } from './guards/admin-auth.guard';
 
 export const routes: Routes = [
-    {path:"", component: HomeComponent},
-    {path:"upload_product", component: UploadProductComponent},
-    {path: "products", component: ProductsComponent}
+  { path: 'login', component: AdminLoginComponent },
+  { path: 'upload_product', component: UploadProductComponent, canActivate: [adminAuthGuard] },
+  { path: 'products', component: ProductsComponent, canActivate: [adminAuthGuard] },
+  { path: '', redirectTo: 'products', pathMatch: 'full' },
+  { path: '**', redirectTo: 'products' }
 ];

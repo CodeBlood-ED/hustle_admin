@@ -1,18 +1,137 @@
-<form class="upload_form" [formGroup]="uploadForm" (ngSubmit)="handleSubmit()">
-    <label for="product_title">Product title</label>
-    <input type="text" id="product_title" formControlName="product_title" />
+<div class="upload-container">
+  <div class="upload-card">
+    <div class="header-section">
+      <div class="title-meta">
+        <h2>Upload Product</h2>
+        <p>Publish a new product item directly into Supabase PostgreSQL database.</p>
+      </div>
+      <a routerLink="/products" class="back-btn">← All Products</a>
+    </div>
 
-    <label for="product_category">Choose product Category</label>
-    <input type="text" id="product_category" formControlName="product_category" />
+    @if (successMessage()) {
+      <div class="alert-success">
+        <span class="alert-icon">✓</span>
+        <div class="alert-content">
+          <strong>Product Uploaded Successfully</strong>
+          <p>{{ successMessage() }}</p>
+        </div>
+        <a routerLink="/products" class="alert-action">View Catalog →</a>
+      </div>
+    }
 
-    <label for="product_mrp">Enter product mrp</label>
-    <input type="text" id="product_mrp" formControlName="product_mrp" />
+    @if (errorMessage()) {
+      <div class="alert-error">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+          <strong>Upload Failed</strong>
+          <p>{{ errorMessage() }}</p>
+        </div>
+      </div>
+    }
 
-    <label for="product_netPrice">Enter product price</label>
-    <input type="text" id="product_netPrice" formControlName="product_netPrice" />
-    
-    <label for="product_image" id="custom_file_upload">Upload product image</label>
-    <input type="file" id="product_image" (change)="onFileChange($event)" formControlName="product_image" />
+    <form class="upload-form" [formGroup]="uploadForm" (ngSubmit)="handleSubmit()">
+      <!-- Title -->
+      <div class="form-group">
+        <label for="product_title">Product Title *</label>
+        <input 
+          type="text" 
+          id="product_title" 
+          formControlName="product_title" 
+          placeholder="e.g. Crystal Grip Case, Leather Luxe"
+          [class.has-error]="uploadForm.get('product_title')?.touched && uploadForm.get('product_title')?.invalid"
+        />
+        @if (uploadForm.get('product_title')?.touched && uploadForm.get('product_title')?.invalid) {
+          <span class="field-error">Product title is required.</span>
+        }
+      </div>
 
-    <button type="submit">Upload product</button>
-</form>
+      <!-- Category selection with presets -->
+      <div class="form-group">
+        <label for="product_category">Product Category / Model *</label>
+        <div class="preset-pills">
+          @for (preset of presetCategories; track preset.slug) {
+            <button 
+              type="button" 
+              class="pill-btn" 
+              [class.active]="uploadForm.get('product_category')?.value === preset.slug"
+              (click)="selectCategory(preset.slug)"
+            >
+              {{ preset.label }}
+            </button>
+          }
+        </div>
+        <input 
+          type="text" 
+          id="product_category" 
+          formControlName="product_category" 
+          placeholder="e.g. iphone-13, iphone-15, accessories"
+        />
+        <span class="field-hint">Storefront links products by category slug (e.g. iphone-13, iphone-14, iphone-15).</span>
+      </div>
+
+      <!-- Pricing Row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="product_mrp">Original MRP *</label>
+          <input 
+            type="text" 
+            id="product_mrp" 
+            formControlName="product_mrp" 
+            placeholder="999/-"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="product_netPrice">Selling Price (Net) *</label>
+          <input 
+            type="text" 
+            id="product_netPrice" 
+            formControlName="product_netPrice" 
+            placeholder="499/-"
+          />
+        </div>
+      </div>
+
+      <!-- Image Upload Area -->
+      <div class="form-group">
+        <label>Product Image *</label>
+        <div class="file-upload-box" [class.has-preview]="imagePreview()">
+          @if (imagePreview()) {
+            <div class="preview-wrapper">
+              <img [src]="imagePreview()" alt="Preview" class="preview-img" />
+              <div class="preview-info">
+                <span>{{ selectedFile?.name }}</span>
+                <label for="product_image" class="change-file-btn">Change Image</label>
+              </div>
+            </div>
+          } @else {
+            <label for="product_image" class="drop-zone-label">
+              <span class="upload-icon">📷</span>
+              <span class="upload-prompt">Click to choose product image</span>
+              <span class="upload-types">Supports PNG, JPG, WEBP (stored securely in database)</span>
+            </label>
+          }
+          <input 
+            type="file" 
+            id="product_image" 
+            accept="image/*"
+            (change)="onFileChange($event)" 
+            formControlName="product_image" 
+            class="hidden-file-input"
+          />
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="form-actions">
+        <button type="submit" class="submit-btn" [disabled]="isUploading() || uploadForm.invalid || !selectedFile">
+          @if (isUploading()) {
+            <span>Uploading to Supabase...</span>
+          } @else {
+            <span>Publish Product to Store Catalog →</span>
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

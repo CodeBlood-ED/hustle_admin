@@ -1,14 +1,60 @@
-<div class="card_panel">
-    @for(eachProduct of products; track eachProduct.product_id) {
-    <div class="card">
-        <div class="product_image">
-            <img src={{eachProduct.product_image}} width="200" height="200">
-        </div>
-        <div class="textArea">
-            <p id="title">{{eachProduct.product_title}}</p>
-            <p>MRP {{eachProduct.product_mrp}}</p>
-            <p>{{eachProduct.product_net_price}}</p>
-        </div>
+<div class="products-container">
+  <div class="products-header">
+    <div class="header-left">
+      <h2>Store Catalog</h2>
+      <p>All active products stored in Supabase PostgreSQL database.</p>
     </div>
-    }
+    <div class="header-actions">
+      <button type="button" class="refresh-btn" (click)="loadProducts()" [disabled]="isLoading()">↻ Refresh</button>
+      <a routerLink="/upload_product" class="upload-btn">+ Upload Product</a>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="error-banner">
+      <span class="error-icon">⚠</span>
+      <span>{{ errorMessage() }}</span>
+      <button type="button" class="retry-btn" (click)="loadProducts()">Retry</button>
+    </div>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading catalog from Supabase...</p>
+    </div>
+  } @else if (products().length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">📦</span>
+      <h3>No Products in Catalog</h3>
+      <p>No products were found in the database. Use the button below to upload your first product.</p>
+      <a routerLink="/upload_product" class="upload-btn">Upload First Product</a>
+    </div>
+  } @else {
+    <div class="products-summary">
+      <span>Total Products: <strong>{{ products().length }}</strong></span>
+    </div>
+
+    <div class="card-grid">
+      @for (item of products(); track item.product_id) {
+        <div class="product-card">
+          <div class="card-image-wrapper">
+            <img [src]="getImageUrl(item.product_image)" [alt]="item.product_title" class="product-thumb" loading="lazy" />
+            <span class="category-badge">{{ item.product_category }}</span>
+          </div>
+
+          <div class="card-details">
+            <h4 class="product-title">{{ item.product_title }}</h4>
+            <div class="pricing-row">
+              <span class="mrp">MRP {{ item.product_mrp }}</span>
+              <span class="net-price">{{ item.product_net_price }}</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-id">Database ID: #{{ item.product_id }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
 </div>
