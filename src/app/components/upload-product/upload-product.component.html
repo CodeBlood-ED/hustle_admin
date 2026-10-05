@@ -1,0 +1,18 @@
+<form class="upload_form" [formGroup]="uploadForm" (ngSubmit)="handleSubmit()">
+    <label for="product_title">Product title</label>
+    <input type="text" id="product_title" formControlName="product_title" />
+
+    <label for="product_category">Choose product Category</label>
+    <input type="text" id="product_category" formControlName="product_category" />
+
+    <label for="product_mrp">Enter product mrp</label>
+    <input type="text" id="product_mrp" formControlName="product_mrp" />
+
+    <label for="product_netPrice">Enter product price</label>
+    <input type="text" id="product_netPrice" formControlName="product_netPrice" />
+    
+    <label for="product_image" id="custom_file_upload">Upload product image</label>
+    <input type="file" id="product_image" (change)="onFileChange($event)" formControlName="product_image" />
+
+    <button type="submit">Upload product</button>
+</form>

@@ -1,0 +1,14 @@
+<div class="card_panel">
+    @for(eachProduct of products; track eachProduct.product_id) {
+    <div class="card">
+        <div class="product_image">
+            <img src={{eachProduct.product_image}} width="200" height="200">
+        </div>
+        <div class="textArea">
+            <p id="title">{{eachProduct.product_title}}</p>
+            <p>MRP {{eachProduct.product_mrp}}</p>
+            <p>{{eachProduct.product_net_price}}</p>
+        </div>
+    </div>
+    }
+</div>

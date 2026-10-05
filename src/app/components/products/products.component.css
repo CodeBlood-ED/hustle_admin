@@ -1,0 +1,27 @@
+.card_panel{
+    width:100%;
+    height:auto;
+    position:relative;
+    top:60px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+.card {
+    position:relative;
+    height:auto;
+    border: 1px solid black;
+    padding:10px;
+}
+img{
+    margin-bottom:30px;
+}
+#title{
+    font-weight: bold;
+}
+.textArea{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}

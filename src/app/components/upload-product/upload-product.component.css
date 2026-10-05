@@ -1,0 +1,47 @@
+.upload_form {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  height:430px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: Poppins;
+}
+button {
+  width: 250px;
+  height: 50px;
+  font-family: Poppins;
+  font-size: 16px;
+  background-color: white;
+  position:absolute;
+  bottom:0;
+  left:25%;
+}
+button:hover {
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+input[type="text"] {
+  margin-bottom: 5px;
+  padding:5px;
+  font-size: 24px;
+}
+input[type="file"] {
+  font-family: Poppins;
+  margin:20px 0 20px 0;
+}
+/* #custom_file_upload {
+  height: 50px;
+  width:177px;
+  color: black;
+  cursor: pointer;
+  font-size: 12px;
+  position:relative;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+} */
